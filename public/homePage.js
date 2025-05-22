@@ -89,22 +89,23 @@ moneyManager.sendMoneyCallback = (data) => {
 // Избранные 
 
 
-function updateFavoritesWidget(){
-    ApiConnector.getFavorites(response => {
+
+ApiConnector.getFavorites(response => {
 	if (response.success) {
 		favoritesWidget.clearTable();
 		favoritesWidget.fillTable(response.data);
 		moneyManager.updateUsersList(response.data);
 	};
 });
-}
 
-updateFavoritesWidget()
+
 
 favoritesWidget.addUserCallback = (data) => {
 	ApiConnector.addUserToFavorites(data, (response) => {
 		if (response.success) {
-            updateFavoritesWidget()
+            favoritesWidget.clearTable();
+			favoritesWidget.fillTable(response.data);
+			moneyManager.updateUsersList(response.data);
 			favoritesWidget.setMessage(true, 'Добавление прошло успешно!')
 		} else {
 			favoritesWidget.setMessage(false, response.error);
@@ -115,7 +116,9 @@ favoritesWidget.addUserCallback = (data) => {
 favoritesWidget.removeUserCallback = (data) => {
 	ApiConnector.removeUserFromFavorites(data, (response) => {
 		if (response.success) {
-            updateFavoritesWidget()
+            favoritesWidget.clearTable();
+			favoritesWidget.fillTable(response.data);
+			moneyManager.updateUsersList(response.data);
 			favoritesWidget.setMessage(response.success, 'Удалние прошло успешно!')
 		} else {
 			favoritesWidget.setMessage(response.success, response.error);
